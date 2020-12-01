@@ -7,6 +7,28 @@ public final class Link implements Comparable {
         this.weight = weight;
     }
 
+    public Router[] getRouters() {
+        return routers;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Link other = (Link) o;
+        Router currentFirstRouter = this.routers[0];
+        Router currentSecondRouter = this.routers[1];
+        Router otherFirstRouter = other.getRouters()[0];
+        Router otherSecondRouter = other.getRouters()[1];
+
+        return currentFirstRouter.equals(otherFirstRouter) && currentSecondRouter.equals(otherSecondRouter) || currentFirstRouter.equals(otherSecondRouter) && currentSecondRouter.equals(otherFirstRouter);
+    }
+
     @Override
     public int compareTo(Object o) {
         Link other = (Link) o;
