@@ -15,6 +15,9 @@ public class Router {
     public void forwardPacket(Packet packet) {
         if (packet.getDestination().equals(this)) {
             this.handlePacket();
+        } else {
+            this.getShortestPath(packet.getDestination());
+            // determine which router is next in the shortest path and forward packet to that router
         }
     }
 
@@ -23,7 +26,7 @@ public class Router {
     }
 
     public void addNeighbour(Link link) {
-
+        neighbours.add(link);
     }
 
     public int getAddress() {
