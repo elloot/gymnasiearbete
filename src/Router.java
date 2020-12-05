@@ -7,16 +7,19 @@ public class Router {
     private Router[][] shortestPaths;
     private Graph topologyGraph;
     private int address;
+    private int level;
 
-    public Router() {
+    public Router(int address, int level) {
         neighbours = new ArrayList<Link>();
+        this.address = address;
+        this.level = level;
     }
 
     public void forwardPacket(Packet packet) {
         if (packet.getDestination().equals(this)) {
-            this.handlePacket();
+//            this.handlePacket();
         } else {
-            this.getShortestPath(packet.getDestination());
+//            this.getShortestPath(packet.getDestination());
             // determine which router is next in the shortest path and forward packet to that router
         }
     }
@@ -33,11 +36,23 @@ public class Router {
         return address;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Router router = (Router) o;
         return address == router.address;
+    }
+
+    @Override
+    public String toString() {
+        return "Router{" +
+                "address=" + address +
+                ", level=" + level +
+                '}';
     }
 }
