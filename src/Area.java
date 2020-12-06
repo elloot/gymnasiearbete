@@ -59,6 +59,10 @@ public class Area {
         return routers[r.nextInt(routers.length)];
     }
 
+    public Router[] getRouters() {
+        return routers;
+    }
+
     @Override
     public String toString() {
         return "Area{" +
