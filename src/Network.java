@@ -20,13 +20,20 @@ public class Network {
         this.setLvlOneTwoNeighbours();
 
         // TODO: visualise graph
-        Graph<Router, DefaultWeightedEdge> g = buildGraph();
-        DijkstraShortestPath<Router, DefaultWeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(g);
+        Graph<Router, WeightedEdge> g = buildGraph();
+        DijkstraShortestPath<Router, WeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(g);
         Router r1 = areas[3].getRouters()[0];
         Router r2 = areas[0].getRouters()[3];
-        ShortestPathAlgorithm.SingleSourcePaths<Router, DefaultWeightedEdge> rPaths = dijkstraAlg.getPaths(r1);
+        ShortestPathAlgorithm.SingleSourcePaths<Router, WeightedEdge> rPaths = dijkstraAlg.getPaths(r1);
 
         System.out.println(rPaths.getPath(r2));
+    }
+
+    public static class WeightedEdge extends DefaultWeightedEdge {
+        @Override
+        public String toString() {
+            return String.valueOf(getWeight());
+        }
     }
 
     public void setLvlOneTwoNeighbours() {
@@ -66,8 +73,8 @@ public class Network {
         }
     }
 
-    public Graph<Router, DefaultWeightedEdge> buildGraph() {
-        Graph<Router, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public Graph<Router, WeightedEdge> buildGraph() {
+        Graph<Router, WeightedEdge> g = new SimpleWeightedGraph<>(WeightedEdge.class);
 
         for (Area currentArea : areas) {
             for (Router currentRouter : currentArea.getRouters()) {
