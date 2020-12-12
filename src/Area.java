@@ -24,12 +24,21 @@ public class Area {
     private void setNeighbours() {
         // TODO: maybe change Routers neighbour array to be Set so each Router can have more than one neighbour
         // and we can be sure it doesn't have two of the same neighbours
-        for (Router currentRouter : routers) {
-            Router otherRouter = getDifferentRouter(currentRouter);
+//        for (Router currentRouter : routers) {
+//            Router otherRouter = getDifferentRouter(currentRouter);
+//            Link neighbourLink = createNeighbourLink(currentRouter, otherRouter);
+//            // both routers add the same link between them
+//            currentRouter.addNeighbour(neighbourLink);
+//            otherRouter.addNeighbour(neighbourLink);
+//        }
+
+        for (int i = 0; i < routers.length; i++) {
+            // TODO: refactor the next lines to fit the current abstraction level
+            Router currentRouter = routers[i];
+            Router otherRouter = i + 1 < routers.length ? routers[i + 1] : routers[0];
             Link neighbourLink = createNeighbourLink(currentRouter, otherRouter);
-            // both routers add the same link between them
             currentRouter.addNeighbour(neighbourLink);
-            otherRouter.addNeighbour(neighbourLink);
+            currentRouter.addNeighbour(neighbourLink.swapRouterPositions());
         }
     }
 

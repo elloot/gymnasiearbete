@@ -15,6 +15,11 @@ public final class Link implements Comparable {
         return weight;
     }
 
+    public Link swapRouterPositions() {
+        Router[] newRouterConfig = {this.routers[1], this.routers[0]};
+        return new Link(newRouterConfig, this.weight);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
