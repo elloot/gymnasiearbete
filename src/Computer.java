@@ -9,8 +9,8 @@ public class Computer {
         this.router.forwardPacket(packet);
     }
 
-    public Packet createPacket(String data, Router destination) {
-        Packet packet = new Packet(this.router, destination, data);
+    public <Data>Packet<Data> createPacket(Data data, Router destination) {
+        Packet<Data> packet = new Packet<>(this.router, destination, data);
         this.sendPacket(packet);
         return packet;
     }
