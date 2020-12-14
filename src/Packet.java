@@ -1,12 +1,12 @@
 import java.util.Objects;
 
-public class Packet {
+public class Packet<Data> {
     private int id;
     private Router source;
     private Router destination;
-    private String data;
+    private Data data;
 
-    public Packet(Router source, Router destination, String data) {
+    public Packet(Router source, Router destination, Data data) {
         // temporary id for hashing later
         this.id = (int) (Math.random() * 1000000);
         this.source = source;
@@ -33,7 +33,7 @@ public class Packet {
         return Objects.hash(id, source, destination, data);
     }
 
-    public String getData() {
+    public Data getData() {
         return data;
     }
 }
