@@ -18,15 +18,16 @@ public class Network {
         this.routersPerArea = routersPerArea;
         this.populate();
         this.setLvlOneTwoNeighbours();
+        shareTopologyGraph();
+    }
 
-        // TODO: visualise graph
-        Graph<Router, WeightedEdge> g = buildGraph();
-        DijkstraShortestPath<Router, WeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(g);
-        Router r1 = areas[3].getRouters()[0];
-        Router r2 = areas[0].getRouters()[3];
-        ShortestPathAlgorithm.SingleSourcePaths<Router, WeightedEdge> rPaths = dijkstraAlg.getPaths(r1);
-
-        System.out.println(rPaths.getPath(r2));
+    public void shareTopologyGraph() {
+        for (Area area : areas) {
+            for (Router router : area.getRouters()) {
+                router.setTopologyGraph(buildGraph());
+                router.getShortestPaths();
+            }
+        }
     }
 
     public static class WeightedEdge extends DefaultWeightedEdge {
