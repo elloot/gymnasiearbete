@@ -20,11 +20,15 @@ public class Router {
 
     public void forwardPacket(Packet packet) {
         if (packet.getDestination().equals(this)) {
-//            this.handlePacket();
+            System.out.println("Packet arrived! Data: " + packet.getData());
         } else {
-//            this.getShortestPath(packet.getDestination());
-            // determine which router is next in the shortest path and forward packet to that router
+            List<Router> shortestPath = getShortestPath(packet.getDestination());
+            shortestPath.get(1).forwardPacket(packet);
         }
+    }
+
+    private List<Router> getShortestPath(Router destination) {
+        return shortestPaths.get(destination);
     }
 
     public void setTopologyGraph(Graph<Router, Network.WeightedEdge> g) {
