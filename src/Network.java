@@ -19,13 +19,21 @@ public class Network {
         this.populate();
         this.setLvlOneTwoNeighbours();
         shareTopologyGraph();
+        getShortestPaths();
+    }
+
+    public void getShortestPaths() {
+        for (Area area : areas) {
+            for (Router router : area.getRouters()) {
+                router.getShortestPaths();
+            }
+        }
     }
 
     public void shareTopologyGraph() {
         for (Area area : areas) {
             for (Router router : area.getRouters()) {
                 router.setTopologyGraph(buildGraph());
-                router.getShortestPaths();
             }
         }
     }
