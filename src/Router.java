@@ -1,11 +1,14 @@
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Router {
     private ArrayList<Link> neighbours;
-    private Router[][] shortestPaths;
-    private Graph topologyGraph;
+    private Map<Router, List<Router>> shortestPaths;
+    private Graph<Router, Network.WeightedEdge> topologyGraph;
     private int address;
     private int level;
 
@@ -21,6 +24,22 @@ public class Router {
         } else {
 //            this.getShortestPath(packet.getDestination());
             // determine which router is next in the shortest path and forward packet to that router
+        }
+    }
+
+    public void setTopologyGraph(Graph<Router, Network.WeightedEdge> g) {
+        this.topologyGraph = g;
+    }
+
+    public void getShortestPaths() {
+        DijkstraShortestPath<Router, Network.WeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(this.topologyGraph);
+        ShortestPathAlgorithm.SingleSourcePaths<Router, Network.WeightedEdge> singleSourcePaths = dijkstraAlg.getPaths(this);
+        shortestPaths = new HashMap<>();
+        for (Router r : topologyGraph.vertexSet()) {
+            if (!r.equals(this)) {
+                GraphPath<Router, Network.WeightedEdge> p = singleSourcePaths.getPath(r);
+                shortestPaths.put(r, p.getVertexList());
+            }
         }
     }
 
