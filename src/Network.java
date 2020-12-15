@@ -1,6 +1,4 @@
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
@@ -19,15 +17,30 @@ public class Network {
         this.populate();
         this.setLvlOneTwoNeighbours();
         shareTopologyGraph();
-        getShortestPaths();
+        getDijsktraShortestPaths();
+        getAStarShortestPaths();
     }
 
-    public void getShortestPaths() {
+    public void getAStarShortestPaths() {
+        long startTime = System.nanoTime();
         for (Area area : areas) {
             for (Router router : area.getRouters()) {
-                router.getShortestPaths();
+                router.getAStarShortestPaths();
             }
         }
+        long time = (System.nanoTime() - startTime) / 1000000;
+        System.out.println("A star took: " + time + " ms");
+    }
+
+    public void getDijsktraShortestPaths() {
+        long startTime = System.nanoTime();
+        for (Area area : areas) {
+            for (Router router : area.getRouters()) {
+                router.getDijsktraShortestPaths();
+            }
+        }
+        long time = (System.nanoTime() - startTime) / 1000000;
+        System.out.println("Dijkstra took: " + time + " ms");
     }
 
     public void shareTopologyGraph() {

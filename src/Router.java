@@ -1,13 +1,16 @@
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.shortestpath.AStarShortestPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.*;
 
 public class Router {
     private ArrayList<Link> neighbours;
-    private Map<Router, List<Router>> shortestPaths;
+    private Map<Router, List<Router>> dijkstraShortestPaths;
+    private Map<Router, List<Router>> aStarShortestPaths;
     private Graph<Router, Network.WeightedEdge> topologyGraph;
     private int address;
     private int level;
@@ -22,27 +25,45 @@ public class Router {
         if (packet.getDestination().equals(this)) {
             System.out.println("Packet arrived! Data: " + packet.getData());
         } else {
-            List<Router> shortestPath = getShortestPath(packet.getDestination());
-            shortestPath.get(1).forwardPacket(packet);
+            List<Router> dijkstraShortestPath = getDijkstraShortestPath(packet.getDestination());
+            dijkstraShortestPath.get(1).forwardPacket(packet);
         }
     }
 
-    private List<Router> getShortestPath(Router destination) {
-        return shortestPaths.get(destination);
+    private List<Router> getDijkstraShortestPath(Router destination) {
+        return dijkstraShortestPaths.get(destination);
     }
 
     public void setTopologyGraph(Graph<Router, Network.WeightedEdge> g) {
         this.topologyGraph = g;
     }
 
-    public void getShortestPaths() {
+    public void getDijsktraShortestPaths() {
         DijkstraShortestPath<Router, Network.WeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(this.topologyGraph);
         ShortestPathAlgorithm.SingleSourcePaths<Router, Network.WeightedEdge> singleSourcePaths = dijkstraAlg.getPaths(this);
-        shortestPaths = new HashMap<>();
+        dijkstraShortestPaths = new HashMap<>();
         for (Router r : topologyGraph.vertexSet()) {
             if (!r.equals(this)) {
                 GraphPath<Router, Network.WeightedEdge> p = singleSourcePaths.getPath(r);
-                shortestPaths.put(r, p.getVertexList());
+                dijkstraShortestPaths.put(r, p.getVertexList());
+            }
+        }
+    }
+
+    public void getAStarShortestPaths() {
+        AStarAdmissibleHeuristic<Router> h = new AStarAdmissibleHeuristic<Router>() {
+            @Override
+            public double getCostEstimate(Router router, Router v1) {
+                return Math.abs(v1.getAddress() - router.getAddress());
+            }
+        };
+        AStarShortestPath<Router, Network.WeightedEdge> aStarAlg = new AStarShortestPath<>(this.topologyGraph, h);
+        ShortestPathAlgorithm.SingleSourcePaths<Router, Network.WeightedEdge> singleSourcePaths = aStarAlg.getPaths(this);
+        aStarShortestPaths = new HashMap<>();
+        for (Router r : topologyGraph.vertexSet()) {
+            if (!r.equals(this)) {
+                GraphPath<Router, Network.WeightedEdge> p = singleSourcePaths.getPath(r);
+                aStarShortestPaths.put(r, p.getVertexList());
             }
         }
     }
