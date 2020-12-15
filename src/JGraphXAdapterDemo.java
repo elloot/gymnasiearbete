@@ -16,6 +16,7 @@ public class JGraphXAdapterDemo extends JApplet {
     private static final Dimension DEFAULT_SIZE = new Dimension(1920, 1000);
 
     private JGraphXAdapter<Router, Network.WeightedEdge> jgxAdapter;
+    public Network n;
 
     /**
      * An alternative starting point for this demo, to also allow running this applet as an
@@ -33,13 +34,15 @@ public class JGraphXAdapterDemo extends JApplet {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        applet.n.getAStarShortestPaths();
+        applet.n.getDijsktraShortestPaths();
     }
 
     @Override
     public void init() {
         // create a JGraphT graph
         //ListenableGraph<String, DefaultEdge> g = new DefaultListenableGraph<>(new DefaultDirectedGraph<>(DefaultEdge.class));
-        Network n = new Network(5, 5);
+        n = new Network(5, 5);
         Graph<Router, Network.WeightedEdge> g = n.buildGraph();
 
         // create a visualization using JGraph, via an adapter
