@@ -28,8 +28,8 @@ public class Network {
                 router.getAStarShortestPaths();
             }
         }
-        long time = (System.nanoTime() - startTime) / 1000000;
-        System.out.println("A star took: " + time + " ms");
+        long time = (System.nanoTime() - startTime) / 1000;
+        System.out.println("A star took: " + time + " micro seconds");
     }
 
     public void getDijsktraShortestPaths() {
@@ -39,8 +39,8 @@ public class Network {
                 router.getDijsktraShortestPaths();
             }
         }
-        long time = (System.nanoTime() - startTime) / 1000000;
-        System.out.println("Dijkstra took: " + time + " ms");
+        long time = (System.nanoTime() - startTime) / 1000;
+        System.out.println("Dijkstra took: " + time + " micro seconds");
     }
 
     public void shareTopologyGraph() {
