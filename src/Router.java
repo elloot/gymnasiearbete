@@ -14,24 +14,33 @@ public class Router {
     private Graph<Router, Network.WeightedEdge> topologyGraph;
     private int address;
     private int level;
+    public Timer timer;
 
-    public Router(int address, int level) {
+    public Router(int address, int level, Timer timer) {
         neighbours = new ArrayList<Link>();
         this.address = address;
         this.level = level;
+        this.timer = timer;
     }
 
     public void forwardPacket(Packet packet) {
         if (packet.getDestination().equals(this)) {
-            System.out.println("Packet arrived! Data: " + packet.getData());
+            System.out.println("Packet arrived! Data: " + packet.getData() + ", destination: " + packet.getDestination() + ", final router: " + this);
+            System.out.println("Took " + timer.nextMillis() + " ms");
         } else {
-            List<Router> dijkstraShortestPath = getDijkstraShortestPath(packet.getDestination());
-            dijkstraShortestPath.get(1).forwardPacket(packet);
+//            List<Router> dijkstraShortestPath = getDijkstraShortestPath(packet.getDestination());
+//            dijkstraShortestPath.get(1).forwardPacket(packet);
+            List<Router> aStarShortestPath = getAStarShortestPath(packet.getDestination());
+            aStarShortestPath.get(1).forwardPacket(packet);
         }
     }
 
     private List<Router> getDijkstraShortestPath(Router destination) {
         return dijkstraShortestPaths.get(destination);
+    }
+
+    private List<Router> getAStarShortestPath(Router destination) {
+        return aStarShortestPaths.get(destination);
     }
 
     public void setTopologyGraph(Graph<Router, Network.WeightedEdge> g) {

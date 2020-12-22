@@ -9,6 +9,7 @@ public class Network {
     private int numAreas;
     private int routersPerArea;
     private static Random r = new Random();
+    private Timer timer = new Timer();
 
     public Network(int numAreas, int routersPerArea) {
         this.numAreas = numAreas;
@@ -17,8 +18,11 @@ public class Network {
         this.populate();
         this.setLvlOneTwoNeighbours();
         shareTopologyGraph();
-        getDijsktraShortestPaths();
+//        getDijsktraShortestPaths();
         getAStarShortestPaths();
+        Computer c = new Computer(areas[0].getRouters()[2]);
+        c.getRouter().timer.start();
+        c.createPacket("Gamer packet", areas[numAreas - 1].getRouters()[1]);
     }
 
     public void getAStarShortestPaths() {
@@ -118,7 +122,7 @@ public class Network {
         // creates a new router, if the router is the last one to be created
         // in this loop,
         // set it to be a lvl 1-2 router
-        return new Router(routerAddress, j % (routersPerArea - 1) == 0 && j != 0 ? 12 : 1);
+        return new Router(routerAddress, j % (routersPerArea - 1) == 0 && j != 0 ? 12 : 1, timer);
     }
 
     private Area createArea(int areaAddress, Router[] routers) {

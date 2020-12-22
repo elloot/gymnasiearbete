@@ -18,7 +18,7 @@ public class Area {
                 return router;
             }
         }
-        return new Router(-1, 1);
+        return new Router(-1, 1, new Timer());
     }
 
     private void setNeighbours() {
